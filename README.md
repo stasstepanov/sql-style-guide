@@ -15,18 +15,15 @@ Here's a non-trivial query to give you an idea of what this style guide looks li
 
 ```sql
 with hubspot_interest as (
-
     select
         email,
         timestamp_millis(property_beacon_interest) as expressed_interest_at
     from hubspot.contact
     where 
         property_beacon_interest is not null
-
 ), 
 
 support_interest as (
-
     select 
         conversation.email,
         conversation.created_at as expressed_interest_at
@@ -34,25 +31,20 @@ support_interest as (
     inner join helpscout.conversation_tag on conversation.id = conversation_tag.conversation_id
     where 
         conversation_tag.tag = 'beacon-interest'
-
 ), 
 
 combined_interest as (
-
     select * from hubspot_interest
     union all
     select * from support_interest
-
 ),
 
 first_interest as (
-
     select 
         email,
         min(expressed_interest_at) as expressed_interest_at
     from combined_interest
     group by email
-
 )
 
 select * from first_interest
@@ -670,24 +662,20 @@ Closing CTE parentheses should use the same indentation level as `with` and the 
 ```sql
 -- Good
 with ordered_details as (
-
     select
         user_id,
         name,
         row_number() over (partition by user_id order by date_updated desc) as details_rank
     from billingdaddy.billing_stored_details
-
 ),
 
 first_updates as (
-
     select 
         user_id, 
         name
     from ordered_details
     where 
         details_rank = 1
-
 )
 
 select * from first_updates
